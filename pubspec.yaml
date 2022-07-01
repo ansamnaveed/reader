@@ -36,13 +36,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   device_info: ^2.0.3
   flutter_downloader: ^1.7.1
-  permission_handler: ^8.3.0
+  permission_handler: ^10.0.0
   http: any
   skeleton_loader: ^2.0.0+4
   path_provider:
   cached_network_image: ^3.2.0
   flutter_launcher_icons: "^0.9.2"
-  flutter_cached_pdfview: ^0.4.1
+  flutter_cached_pdfview:
   
 
 dev_dependencies:
