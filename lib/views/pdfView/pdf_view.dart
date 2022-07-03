@@ -90,74 +90,75 @@ class _ReaderState extends State<Reader> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leadingWidth: 30,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          widget.title,
-          style: TextStyle(color: Colors.black, fontSize: 16),
+        appBar: AppBar(
+          leadingWidth: 30,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            widget.title,
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          actions: [
+            IconButton(
+              color: Colors.black,
+              onPressed: dStatus == 'Complete'
+                  ? null
+                  : dStatus == 'Running'
+                      ? null
+                      : dStatus == 'Canceled'
+                          ? () {
+                              downloadFile(widget.file);
+                            }
+                          : () {
+                              downloadFile(widget.file);
+                            },
+              icon: dStatus == 'Complete'
+                  ? Icon(
+                      Icons.download_done_rounded,
+                      color: Colors.green,
+                    )
+                  : dStatus == 'Failed'
+                      ? Icon(
+                          Icons.warning_rounded,
+                          color: Colors.yellow,
+                        )
+                      : dStatus == 'Canceled'
+                          ? Icon(
+                              Icons.download_rounded,
+                              color: Colors.black,
+                            )
+                          : dStatus == 'Running'
+                              ? Text(
+                                  "$progress%",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Icon(Icons.download_rounded),
+            ),
+          ],
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.black,
+            ),
+          ),
         ),
-        actions: [
-          IconButton(
-            color: Colors.black,
-            onPressed: dStatus == 'Complete'
-                ? null
-                : dStatus == 'Running'
-                    ? null
-                    : dStatus == 'Canceled'
-                        ? () {
-                            downloadFile(widget.file);
-                          }
-                        : () {
-                            downloadFile(widget.file);
-                          },
-            icon: dStatus == 'Complete'
-                ? Icon(
-                    Icons.download_done_rounded,
-                    color: Colors.green,
-                  )
-                : dStatus == 'Failed'
-                    ? Icon(
-                        Icons.warning_rounded,
-                        color: Colors.yellow,
-                      )
-                    : dStatus == 'Canceled'
-                        ? Icon(
-                            Icons.download_rounded,
-                            color: Colors.black,
-                          )
-                        : dStatus == 'Running'
-                            ? Text(
-                                "$progress%",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              )
-                            : Icon(Icons.download_rounded),
+        body: Center(
+          child: PDF(swipeHorizontal: true, enableSwipe: true).cachedFromUrl(
+            widget.file,
+            placeholder: (progress) => Center(
+              child: CircularProgressIndicator(),
+            ),
+            errorWidget: (error) => Center(child: Text(error.toString())),
           ),
-        ],
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: Center(
-        child: PDF(
-          swipeHorizontal: true,
-        ).cachedFromUrl(
-          widget.file,
-          placeholder: (progress) => Center(
-            child: CircularProgressIndicator(),
-          ),
-          errorWidget: (error) => Center(child: Text(error.toString())),
         ),
       ),
     );

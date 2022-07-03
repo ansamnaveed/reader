@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get/get.dart';
 import 'package:reader/widgets/const.dart';
 import 'views/splash_screen.dart';
 
@@ -18,17 +19,18 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return MaterialApp(
+    return GetMaterialApp(
       builder: (context, child) {
         return MediaQuery(
           child: child,
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         );
       },
+      textDirection: TextDirection.rtl,
       title: 'Digital Library',
       debugShowCheckedModeBanner: false,
-      theme: 
-      ThemeData(
+      theme: ThemeData(
+        fontFamily: 'Open Sans',
         primarySwatch: appThemeColor,
         canvasColor: appThemeColor,
       ),

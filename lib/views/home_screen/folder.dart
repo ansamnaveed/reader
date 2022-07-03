@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:io' as io;
@@ -16,24 +15,7 @@ class FolderContents extends StatefulWidget {
   _FolderContentsState createState() => _FolderContentsState();
 }
 
-class Debouncer {
-  int milliseconds;
-  VoidCallback action;
-  Timer timer;
-
-  run(VoidCallback action) {
-    if (null != timer) {
-      timer.cancel();
-    }
-    timer = Timer(
-      Duration(milliseconds: Duration.millisecondsPerSecond),
-      action,
-    );
-  }
-}
-
 class _FolderContentsState extends State<FolderContents> {
-  final _debouncer = Debouncer();
   String directory;
   List file;
   List ffile = [];
@@ -60,9 +42,6 @@ class _FolderContentsState extends State<FolderContents> {
     });
 
     for (var i = 0; i < file.length; i++) {
-      // if (file[i].toString().split(':').first == 'File') {
-      //   ffile.add(file[i]);
-      // }
       if (file[i]
               .toString()
               .split('Download/')
@@ -79,83 +58,86 @@ class _FolderContentsState extends State<FolderContents> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+          ),
+          leadingWidth: 30,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            "Downloads",
+            style: TextStyle(color: Colors.black),
           ),
         ),
-        leadingWidth: 30,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          "Downloads",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: ffile == null
-          ? Center(
-              child: Text('No Data'),
-            )
-          : Container(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: ffile.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          onTap: () {
-                            push(
-                              context,
-                              Pdfd(
-                                  file: ffile[index],
-                                  name: ffile[index]
-                                      .toString()
-                                      .split('Balochi_docs/')
-                                      .last
-                                      .split('.')
-                                      .first),
-                            );
-                          },
-                          leading: Container(
-                            padding: EdgeInsets.all(5),
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '.pdf',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+        body: ffile == null
+            ? Center(
+                child: Text('No Data'),
+              )
+            : Container(
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: ffile.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            onTap: () {
+                              push(
+                                context,
+                                Pdfd(
+                                    file: ffile[index],
+                                    name: ffile[index]
+                                        .toString()
+                                        .split('Balochi_docs/')
+                                        .last
+                                        .split('.')
+                                        .first),
+                              );
+                            },
+                            leading: Container(
+                              padding: EdgeInsets.all(5),
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '.pdf',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                          title: Text(ffile[index]
-                              .toString()
-                              .split('Download/')
-                              .last
-                              .split("'")
-                              .first
-                              .split('.')
-                              .first),
-                        );
-                      },
-                    ),
-                  )
-                ],
+                            title: Text(ffile[index]
+                                .toString()
+                                .split('Download/')
+                                .last
+                                .split("'")
+                                .first
+                                .split('.')
+                                .first),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
+      ),
     );
   }
 }
